@@ -257,18 +257,18 @@
 			slew-rate = <0>;
 			io-standard = <1>;
 		};
+	};
 
-		mux-wp {
-			groups = "gpio0_15_grp";
-			function = "sdio0_wp";
+	pinctrl_sdhci1_default: sdhci1-default {
+		mux {
+			groups = "sdio1_0_grp";
+			function = "sdio1";
 		};
 
-		conf-wp {
-			groups = "gpio0_15_grp";
-			bias-high-impedance;
-			bias-pull-up;
+		conf {
+			groups = "sdio1_0_grp";
 			slew-rate = <0>;
-			io-standard = <1>;
+			io-standard = <3>;
 		};
 	};
 
@@ -386,11 +386,18 @@
 &sdhci1 {
 	u-boot,dm-pre-reloc;
 	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sdhci1_default>;
+
 	non-removable;
-	xlnx,fails-without-test-cd;
-	/* Write errs without this, Zynq Errata or level translators? */
-	/* This also disables 4 bit mode */
+
 	broken-mmc-highspeed;
+
+	/* Depends on a mmc/core/mmc.c patch to attempt to set bus width after
+	 * marking mmc highspeed as broken.
+	 */
+	bus-width = <4>;
 };
 
 &uart1 {
