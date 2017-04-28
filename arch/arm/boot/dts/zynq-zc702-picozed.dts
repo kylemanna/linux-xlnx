@@ -382,3 +382,7 @@
 	pinctrl-0 = <&pinctrl_usb0_default>;
 };
 */
+
+&watchdog0 {
+	reset-on-timeout;
+};
